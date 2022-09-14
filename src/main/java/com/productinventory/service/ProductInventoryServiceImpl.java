@@ -1,16 +1,25 @@
 package com.productinventory.service;
 
-import com.productinventory.bean.InventoryItem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.productinventory.bean.InventoryItem;
+import com.productinventory.persistence.ProductInventoryDao;
+
+@Service
 public class ProductInventoryServiceImpl implements ProductInventoryService {
+	@Autowired
+	private ProductInventoryDao productInventoryDao;
 
 	@Override
 	public InventoryItem getInventoryItemByProductCode(String productCode) {
-		return null;
+		return productInventoryDao.findByProductCode(productCode);
 	}
 
 	@Override
 	public boolean updateInventoryItemQuantityByProductCode(String productCode, int availableQuantity) {
-		return false;
+		if(availableQuantity < 0) return false;
+		
+		return productInventoryDao.updateInventoryItemQuantityByProductCode(productCode, availableQuantity) > 0;
 	}
 }
